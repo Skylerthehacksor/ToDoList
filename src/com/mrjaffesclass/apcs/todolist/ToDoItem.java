@@ -1,4 +1,13 @@
 package com.mrjaffesclass.apcs.todolist;
+
+import java.text.Format;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  * To do item
  * 
@@ -12,8 +21,12 @@ public class ToDoItem {
    * description: Description of to do item
    * done:        True if to do item is complete
    */
+  private Calendar cal = Calendar.getInstance();  
+    
   private int id;               
   private String description;
+  private Date date;
+  private SimpleDateFormat format = new SimpleDateFormat("E M/d");
   private boolean done;
   
   /**
@@ -24,7 +37,35 @@ public class ToDoItem {
   public ToDoItem(int _id, String _description) {
     description = _description;
     id = _id;
+    date = cal.getTime();
     done = false;     // Default to not completed
+  }
+ 
+  /**
+   * Constructor with done set to false in constructor
+   * @param _id           ID number of to do item
+   * @param _description  Description of to do item
+   * @param _date         The date a task must be done by
+   */
+  public ToDoItem(int _id, String _description, String _date) {
+    description = _description;
+    id = _id;
+    date = calcDate(_date);
+    done = false;     // Default to not completed
+  }
+  
+    /**
+   * Constructor
+   * @param _id           ID number of to do item
+   * @param _description  Description of to do item
+   * @param _done         Done flag
+   * @param _date         The date a task must be done by
+   */
+  public ToDoItem(int _id, String _description, boolean _done, String _date) {
+    description = _description;
+    id = _id;
+    date = cal.getTime();
+    done = _done;     // Default to not completed
   }
 
   /**
@@ -36,9 +77,36 @@ public class ToDoItem {
   public ToDoItem(int _id, String _description, boolean _done) {
     description = _description;
     id = _id;
+    date = cal.getTime();
     done = _done;     // Default to not completed
   }
-
+     
+  public Date calcDate(String _input)
+  {
+      Date tempDate = null;
+      try {
+          tempDate  = format.parse(_input);
+      } catch (ParseException ex) 
+      {
+      }
+      return tempDate ;
+  }
+  
+  public String getDate()
+  {
+      return format.format(date);
+  }
+  
+  public void setDate(Date date)
+  {
+      this.date = date;
+  }
+  
+  public void setDate(String date)
+  {
+      this.date = calcDate(date);
+  }
+  
   /**
    * Get the to do item description
    * @return The description of to do item
